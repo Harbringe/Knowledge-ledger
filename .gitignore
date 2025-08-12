@@ -218,4 +218,3 @@ PRODUCTION_DEPLOYMENT.md
 RENDER_DEPLOYMENT.md
 RENDER_CHECKLIST.md
 .env.production
-build_render.sh
