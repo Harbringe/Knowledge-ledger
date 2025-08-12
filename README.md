@@ -353,12 +353,7 @@ The project is configured for deployment on **Render** with the following setup:
   ./build.sh
   ```
 
-* **Static Files**: Ensure your Django settings use `whitenoise` for serving static files in production.
-  Add this to `middleware` in `settings.py`:
-
-  ```python
-  'whitenoise.middleware.WhiteNoiseMiddleware',
-  ```
+* **Static Files**: Django will serve static files using the default static files handling. For production, consider using a CDN or web server for better performance.
 
 * **Database**: PostgreSQL is auto-configured if provisioned through Render. Ensure `dj-database-url` is used in your `settings.py`.
 
