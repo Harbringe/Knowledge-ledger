@@ -211,3 +211,11 @@ yarn-error.log*
 next-env.d.ts
 
 # End of https://www.toptal.com/developers/gitignore/api/nextjs
+
+# Render deployment files
+render.yaml
+PRODUCTION_DEPLOYMENT.md
+RENDER_DEPLOYMENT.md
+RENDER_CHECKLIST.md
+.env.production
+build_render.sh

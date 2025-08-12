@@ -67,3 +67,4 @@ urllib3==1.26.18
 
 yarl==1.18.0
 zipp==3.21.0
+gunicorn==21.2.0

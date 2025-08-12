@@ -20,7 +20,7 @@
   <a href="https://jwt.io/" target="_blank">
     <img src="https://img.shields.io/badge/JWT-Auth-orange?logo=jsonwebtokens" alt="JWT"/>
   </a>
-  <a href="https://github.com/Harbringe/Web3Lms/blob/main/LICENSE" target="_blank">
+  <a href="https://github.com/Harbringe/Knowledge-ledger/blob/main/LICENSE" target="_blank">
     <img src="https://img.shields.io/badge/License-GPL-green.svg" alt="GPL License"/>
   </a>
   <a href="https://render.com/" target="_blank">
@@ -35,7 +35,7 @@
   <a href="https://ethereum.org/" target="_blank">
     <img src="https://img.shields.io/badge/Ethereum-SmartContracts-purple?logo=ethereum" alt="Ethereum"/>
   </a>
-  <a href="https://github.com/Harbringe/Web3Lms/discussions" target="_blank">
+  <a href="https://github.com/Harbringe/Knowledge-ledger/discussions" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-Discussions-blue?logo=github" alt="Discussions"/>
   </a>
 </p>
@@ -109,7 +109,7 @@
 
 ## ✨ Overview
 
-**Web3Lms** is a next-generation Learning Management System (LMS) focused on blockchain and Web3 technology education. Built on the Cardano blockchain, it offers a decentralized, verifiable, and transparent platform for both students and instructors. The platform enables learners to earn immutable, blockchain-stored certificates and credentials, while instructors can create, manage, and monetize high-quality courses.
+**Knowledge Ledger** is a next-generation Learning Management System (LMS) focused on blockchain and Web3 technology education. Built on the Cardano blockchain, it offers a decentralized, verifiable, and transparent platform for both students and instructors. The platform enables learners to earn immutable, blockchain-stored certificates and credentials, while instructors can create, manage, and monetize high-quality courses.
 
 </div>
 
@@ -298,7 +298,7 @@ graph LR
 ```bash
 # Clone the repository
 git clone <repo-url>
-cd Web3Lms/backend
+cd Knowledge-ledger/backend
 
 # Create virtual environment
 python -m venv .venv
@@ -397,7 +397,7 @@ Create a `.env` file with the following variables:
 
 ```env
 # Database
-DB_CONN_URL=postgresql://user:password@localhost:5432/web3lms
+DB_CONN_URL=postgresql://user:password@localhost:5432/knowledge-ledger
 
 # Email (Mailgun)
 MAILGUN_API_KEY=your-mailgun-api-key
@@ -422,7 +422,7 @@ DJANGO_SUPERUSER_USERNAME=superuser
 
 ```bash
 # Create PostgreSQL database
-createdb web3lms
+createdb Knowledge Ledger
 
 # Run migrations
 python manage.py migrate

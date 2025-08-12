@@ -458,7 +458,7 @@ class RazorpayCheckoutAPIView(generics.CreateAPIView):
                 'key': settings.RAZORPAY_KEY_ID,
                 'amount': float(order.total),
                 'currency': 'INR',
-                'name': 'Web3Lms',
+                'name': 'Knowledge Ledger',   #TODO: CHanged this from Web3Lms to Knowledge Ledger
                 'description': f'Payment for order {order.oid} of {order.total} by {order.full_name} ({order.email})',
                 'order_id': razorpay_order['id'],
                 'callback_url': f'{settings.FRONTEND_SITE_URL}/payment/success',

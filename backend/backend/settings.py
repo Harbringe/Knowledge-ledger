@@ -26,12 +26,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l+8qy+mjk4a5hx=*g040%%jkfhep#e^0^-10pa0%qb!ucy_2b6'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app', 'web3lms.onrender.com','.now.sh']
+ALLOWED_HOSTS = [
+    '127.0.0.1', 
+    'localhost',
+    '.vercel.app', 
+    '.onrender.com',  # Allows all Render subdomains
+    '.now.sh',
+    env.list('ALLOWED_HOSTS', default=[])
+]
 
 
 # Application definition
@@ -193,10 +200,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS  = {
     "site_title": "Admin Panel",
-    "site_header": "WEB3 LMS",
-    "site_brand": "WEB3LMS",
+    "site_header": "Knowledge Ledger",
+    "site_brand": "Knowledge Ledger",
     # "site_logo": "path-to-logo",
-    "welcome_sign": "Welcome to the Web3 LMS",
+    "welcome_sign": "Welcome to the Knowledge Ledger",
     "copyright": "",
     "show_ui_builder": True,
 }
@@ -295,9 +302,50 @@ RAZORPAY_KEY_SECRET = env('RAZORPAY_KEY_SECRET')
 
 
 # Add these settings
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8000', 'http://127.0.0.1:8000', 'https://web3lms.onrender.com', 'http://web3lms.onrender.com', 'https://bclms.vercel.app', 'https://web3lmsfrontendcardano.vercel.app', env("FRONTEND_SITE_URL"), 'https://checkout.razorpay.com', 'https://api.razorpay.com']
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8000', 'http://127.0.0.1:8000', 'https://web3lms.onrender.com', 'http://web3lms.onrender.com', 'https://bclms.vercel.app', 'https://web3lmsfrontendcardano.vercel.app', env("FRONTEND_SITE_URL"), 'https://checkout.razorpay.com', 'https://api.razorpay.com']    
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8000', 'http://127.0.0.1:8000', 'https://bclms.vercel.app', 'https://web3lmsfrontendcardano.vercel.app', env("FRONTEND_SITE_URL"), 'https://checkout.razorpay.com', 'https://api.razorpay.com']
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8000', 'http://127.0.0.1:8000', 'https://bclms.vercel.app', 'https://web3lmsfrontendcardano.vercel.app', env("FRONTEND_SITE_URL"), 'https://checkout.razorpay.com', 'https://api.razorpay.com']    
 CORS_ALLOW_CREDENTIALS = True
+
+# Production Logging Configuration
+if not DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+                'style': '{',
+            },
+            'simple': {
+                'format': '{levelname} {message}',
+                'style': '{',
+            },
+        },
+        'handlers': {
+            'file': {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+                'formatter': 'verbose',
+            },
+            'console': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'simple',
+            },
+        },
+        'root': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console', 'file'],
+                'level': 'INFO',
+                'propagate': False,
+            },
+        },
+    }
 # CORS_ORIGIN_ALLOW_ALL = True
 # CORS_REPLACE_HTTPS_REFERER = True
 # CSRF_COOKIE_DOMAIN = 'onrender.com'
@@ -307,4 +355,22 @@ CORS_ALLOW_CREDENTIALS = True
 #     'onrender.com'
 # )
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Production Security Settings
+if not DEBUG:
+    # HTTPS Settings
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Additional Production Security
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+else:
+    # Development Settings
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

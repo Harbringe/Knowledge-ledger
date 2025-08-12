@@ -19,6 +19,7 @@ from django.http import HttpResponse
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from core.views import health_check
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -45,7 +46,8 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
     path("api/v1/", include("api.urls")),
-    path("ping/", lambda request: HttpResponse("pong"))
+    path("ping/", lambda request: HttpResponse("pong")),
+    path("health/", health_check, name="health_check")
 ]
 
 
