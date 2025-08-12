@@ -302,8 +302,37 @@ RAZORPAY_KEY_SECRET = env('RAZORPAY_KEY_SECRET')
 
 
 # Add these settings
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8000', 'http://127.0.0.1:8000', 'https://bclms.vercel.app', 'https://web3lmsfrontendcardano.vercel.app', env("FRONTEND_SITE_URL"), 'https://checkout.razorpay.com', 'https://api.razorpay.com']
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8000', 'http://127.0.0.1:8000', 'https://bclms.vercel.app', 'https://web3lmsfrontendcardano.vercel.app', env("FRONTEND_SITE_URL"), 'https://checkout.razorpay.com', 'https://api.razorpay.com']    
+# CSRF and CORS origins from environment variables with fallbacks
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[
+    'http://localhost:3000', 
+    'http://127.0.0.1:3000', 
+    'http://localhost:5173', 
+    'http://127.0.0.1:5173', 
+    'http://localhost:8000', 
+    'http://127.0.0.1:8000',
+    'https://checkout.razorpay.com', 
+    'https://api.razorpay.com'
+])
+
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
+    'http://localhost:3000', 
+    'http://127.0.0.1:3000', 
+    'http://localhost:5173', 
+    'http://127.0.0.1:5173', 
+    'http://localhost:8000', 
+    'http://127.0.0.1:8000',
+    'https://checkout.razorpay.com', 
+    'https://api.razorpay.com'
+])
+
+# Add FRONTEND_SITE_URL to both lists if it exists
+if env("FRONTEND_SITE_URL", default=None):
+    frontend_url = env("FRONTEND_SITE_URL")
+    if frontend_url not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(frontend_url)
+    if frontend_url not in CORS_ALLOWED_ORIGINS:
+        CORS_ALLOWED_ORIGINS.append(frontend_url)
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Production Logging Configuration
