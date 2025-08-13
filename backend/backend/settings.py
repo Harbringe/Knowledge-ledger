@@ -172,7 +172,6 @@ if not DEBUG:
 # Whitenoise configuration for static files
 WHITENOISE_USE_FINDERS = True
 WHITENOISE_AUTOREFRESH = DEBUG
-WHITENOISE_ADD_HEADERS_FUNCTION = 'whitenoise.middleware.add_headers_function'
 WHITENOISE_MIMETYPES = {
     '.js': 'application/javascript',
     '.css': 'text/css',
