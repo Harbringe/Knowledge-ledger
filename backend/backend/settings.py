@@ -204,7 +204,9 @@ if not env('CLOUDINARY_CLOUD_NAME', default=None):
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 else:
-    MEDIA_URL = f"https://res.cloudinary.com/{env('CLOUDINARY_CLOUD_NAME')}/image/upload/"
+    # For Cloudinary, we don't need to set MEDIA_URL as Cloudinary handles URLs
+    MEDIA_URL = ''
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Keep for fallback
 
 # Default static files configuration
 DEFAULT_AVATAR = '/static/images/defaults/avatars/default-avatar.jpg'

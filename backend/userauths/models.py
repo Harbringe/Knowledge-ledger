@@ -66,6 +66,17 @@ class Profile(models.Model):
             self.user.wallet_address = self.user.wallet_address
             
         super(Profile, self).save(*args, **kwargs)
+    
+    @property
+    def image_url(self):
+        """Get the proper image URL for Cloudinary or local storage"""
+        if self.image:
+            # If using Cloudinary, return the URL directly
+            if hasattr(self.image, 'url'):
+                return self.image.url
+            # Fallback for local storage
+            return f'/media/{self.image}'
+        return None
 
 
 def create_user_profile(sender, instance, created, **kwargs):

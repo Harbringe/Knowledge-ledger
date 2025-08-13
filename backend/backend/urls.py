@@ -51,5 +51,8 @@ urlpatterns = [
 ]
 
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings. STATIC_URL, document_root=settings.STATIC_ROOT)
+# Only add media URLs if not using Cloudinary
+if not getattr(settings, 'CLOUDINARY_STORAGE', {}).get('CLOUD_NAME'):
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

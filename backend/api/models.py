@@ -95,6 +95,17 @@ class Teacher(models.Model):
     def review(self):
         return Course.objects.filter(teacher=self).count()
     
+    @property
+    def image_url(self):
+        """Get the proper image URL for Cloudinary or local storage"""
+        if self.image:
+            # If using Cloudinary, return the URL directly
+            if hasattr(self.image, 'url'):
+                return self.image.url
+            # Fallback for local storage
+            return f'/media/{self.image}'
+        return None
+    
     # def save(self, *args, **kwargs):
     #     if not self.wallet_address:
     #         self.wallet_address = self.user.wallet_address
@@ -120,6 +131,17 @@ class Category(models.Model):
         if self.slug == "" or self.slug == None:
             self.slug = slugify(self.title) 
         super(Category, self).save(*args, **kwargs)
+    
+    @property
+    def image_url(self):
+        """Get the proper image URL for Cloudinary or local storage"""
+        if self.image:
+            # If using Cloudinary, return the URL directly
+            if hasattr(self.image, 'url'):
+                return self.image.url
+            # Fallback for local storage
+            return f'/media/{self.image}'
+        return None
             
 
 class Course(models.Model):
@@ -189,6 +211,28 @@ class Course(models.Model):
     
     def get_total_lectures(self):
         return self.lectures().count()
+    
+    @property
+    def image_url(self):
+        """Get the proper image URL for Cloudinary or local storage"""
+        if self.image:
+            # If using Cloudinary, return the URL directly
+            if hasattr(self.image, 'url'):
+                return self.image.url
+            # Fallback for local storage
+            return f'/media/{self.image}'
+        return None
+    
+    @property
+    def file_url(self):
+        """Get the proper file URL for Cloudinary or local storage"""
+        if self.file:
+            # If using Cloudinary, return the URL directly
+            if hasattr(self.file, 'url'):
+                return self.file.url
+            # Fallback for local storage
+            return f'/media/{self.file}'
+        return None
 
 
 class Certificate(models.Model):
@@ -214,6 +258,17 @@ class Certificate(models.Model):
 
     def __str__(self):
         return f"{self.student_name} - {self.course_name}"
+    
+    @property
+    def pdf_url(self):
+        """Get the proper PDF URL for Cloudinary or local storage"""
+        if self.pdf_file:
+            # If using Cloudinary, return the URL directly
+            if hasattr(self.pdf_file, 'url'):
+                return self.pdf_file.url
+            # Fallback for local storage
+            return f'/media/{self.pdf_file}'
+        return None
     
     def save(self, *args, **kwargs):
         if not self.student_name and self.user:
@@ -276,6 +331,17 @@ class VariantItem(models.Model):
 
     def __str__(self):
         return f"{self.variant.title} - {self.title}"
+    
+    @property
+    def file_url(self):
+        """Get the proper file URL for Cloudinary or local storage"""
+        if self.file:
+            # If using Cloudinary, return the URL directly
+            if hasattr(self.file, 'url'):
+                return self.file.url
+            # Fallback for local storage
+            return f'/media/{self.file}'
+        return None
     
     # def save(self, *args, **kwargs):
     #     super().save(*args, **kwargs)
