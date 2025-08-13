@@ -28,7 +28,7 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Web3 LMS Backend APIs",
+      title="Knowledge Ledger Backend APIs",
       default_version='v1',
       description="This is the API documentation for Web3 based LMS project APIs",
       terms_of_service="https://www.google.com/policies/terms/",
@@ -37,7 +37,7 @@ schema_view = get_schema_view(
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
-#    url='https://web3lms.onrender.com',  
+   url='https://knowledge-ledger.onrender.com',  
 )
 
 urlpatterns = [
