@@ -337,44 +337,81 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Production Logging Configuration
 if not DEBUG:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'verbose': {
-                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-                'style': '{',
+    # Check if we're on Render (serverless) - use console-only logging
+    if os.environ.get('RENDER', False):
+        # Render-specific logging (console only)
+        LOGGING = {
+            'version': 1,
+            'disable_existing_loggers': False,
+            'formatters': {
+                'simple': {
+                    'format': '{levelname} {message}',
+                    'style': '{',
+                },
             },
-            'simple': {
-                'format': '{levelname} {message}',
-                'style': '{',
+            'handlers': {
+                'console': {
+                    'level': 'INFO',
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'simple',
+                },
             },
-        },
-        'handlers': {
-            'file': {
+            'root': {
+                'handlers': ['console'],
                 'level': 'INFO',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-                'formatter': 'verbose',
             },
-            'console': {
-                'level': 'INFO',
-                'class': 'logging.StreamHandler',
-                'formatter': 'simple',
+            'loggers': {
+                'django': {
+                    'handlers': ['console'],
+                    'level': 'INFO',
+                    'propagate': False,
+                },
             },
-        },
-        'root': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-        },
-        'loggers': {
-            'django': {
+        }
+    else:
+        # Standard production logging with file handler
+        # Ensure logs directory exists
+        logs_dir = os.path.join(BASE_DIR, 'logs')
+        os.makedirs(logs_dir, exist_ok=True)
+        
+        LOGGING = {
+            'version': 1,
+            'disable_existing_loggers': False,
+            'formatters': {
+                'verbose': {
+                    'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+                    'style': '{',
+                },
+                'simple': {
+                    'format': '{levelname} {message}',
+                    'style': '{',
+                },
+            },
+            'handlers': {
+                'file': {
+                    'level': 'INFO',
+                    'class': 'logging.FileHandler',
+                    'filename': os.path.join(logs_dir, 'django.log'),
+                    'formatter': 'verbose',
+                },
+                'console': {
+                    'level': 'INFO',
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'simple',
+                },
+            },
+            'root': {
                 'handlers': ['console', 'file'],
                 'level': 'INFO',
-                'propagate': False,
             },
-        },
-    }
+            'loggers': {
+                'django': {
+                    'handlers': ['console', 'file'],
+                    'level': 'INFO',
+                    'propagate': False,
+                },
+            },
+        }
 # CORS_ORIGIN_ALLOW_ALL = True
 # CORS_REPLACE_HTTPS_REFERER = True
 # CSRF_COOKIE_DOMAIN = 'onrender.com'

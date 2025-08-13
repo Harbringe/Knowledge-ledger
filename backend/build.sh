@@ -17,6 +17,12 @@ pip install -r requirements.txt
 echo "🔒 Setting Production Environment Variables..."
 # Ensure DEBUG is set to False for production
 export DEBUG=False
+# Set RENDER environment variable for logging configuration
+export RENDER=True
+
+echo "📁 Creating necessary directories..."
+# Create logs directory for Django logging
+mkdir -p logs
 
 echo "🗄️  Running Database Migrations..."
 python manage.py migrate --no-input
@@ -33,6 +39,7 @@ find . -type d -name "__pycache__" -delete
 
 echo "📊 Production Build Summary:"
 echo "   ✅ Dependencies installed"
+echo "   ✅ Logs directory created"
 echo "   ✅ Database migrated"
 echo "   ✅ Static files collected"
 echo "   ✅ Security checks passed"
