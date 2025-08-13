@@ -363,7 +363,7 @@ This project is licensed under the GPL License
 - **Deployment**: Backend on Render, Frontend on Vercel
 
 ---
-## ��‍💻 About the Authors
+## 💻 About the Authors
 
 ### Backend Maintainer
 > **Aaditya Mehetre** (He/Him)  
