@@ -25,6 +25,14 @@ echo "   📂 Current directory: $(pwd)"
 echo "   📂 Django settings module: $DJANGO_SETTINGS_MODULE"
 echo "   📂 Static files directory: $(python -c 'from django.conf import settings; print(settings.STATIC_ROOT)')"
 
+# Check if whitenoise is available
+echo "   🔍 Checking Whitenoise availability..."
+if python -c "import whitenoise; print('Whitenoise available')" 2>/dev/null; then
+    echo "   ✅ Whitenoise package is available"
+else
+    echo "   ❌ Whitenoise package not available - static files may not serve properly"
+fi
+
 # Force static file collection with verbose output
 python manage.py collectstatic --no-input --clear --verbosity=2
 
@@ -59,6 +67,14 @@ if [ -d "staticfiles" ]; then
         else
             echo "   ❌ drf-yasg package not available"
         fi
+    fi
+    
+    # Check whitenoise configuration
+    echo "   🔍 Verifying Whitenoise configuration..."
+    if python -c "from django.conf import settings; print('WHITENOISE_USE_FINDERS:', getattr(settings, 'WHITENOISE_USE_FINDERS', 'Not set'))" 2>/dev/null; then
+        echo "   ✅ Whitenoise settings verified"
+    else
+        echo "   ⚠️  Could not verify Whitenoise settings"
     fi
 else
     echo "   ❌ staticfiles directory not created"
