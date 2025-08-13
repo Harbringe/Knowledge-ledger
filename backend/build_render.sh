@@ -21,7 +21,50 @@ echo "🗄️  Running Database Migrations..."
 python manage.py migrate --no-input
 
 echo "📁 Collecting Static Files for Render..."
-python manage.py collectstatic --no-input --clear
+echo "   📂 Current directory: $(pwd)"
+echo "   📂 Django settings module: $DJANGO_SETTINGS_MODULE"
+echo "   📂 Static files directory: $(python -c 'from django.conf import settings; print(settings.STATIC_ROOT)')"
+
+# Force static file collection with verbose output
+python manage.py collectstatic --no-input --clear --verbosity=2
+
+# Verify what was collected
+echo "   📊 Static files collection results:"
+if [ -d "staticfiles" ]; then
+    echo "   ✅ staticfiles directory exists"
+    echo "   📁 Contents:"
+    ls -la staticfiles/ | head -10
+    echo "   📊 Total files: $(find staticfiles/ -type f | wc -l)"
+    
+    # Check specifically for drf-yasg
+    if [ -d "staticfiles/drf-yasg" ]; then
+        echo "   ✅ drf-yasg static files found"
+        ls -la staticfiles/drf-yasg/ | head -5
+    else
+        echo "   ❌ drf-yasg static files missing"
+        echo "   🔍 Checking what's in staticfiles:"
+        find staticfiles/ -type d | head -10
+        
+        # Try to manually find and copy drf-yasg static files
+        echo "   🔧 Attempting manual drf-yasg static file copy..."
+        if python -c "import drf_yasg; print('drf-yasg available')" 2>/dev/null; then
+            echo "   📁 drf-yasg package is available"
+            DRF_YASG_PATH=$(python -c "import drf_yasg; print(drf_yasg.__path__[0])" 2>/dev/null)
+            if [ -d "$DRF_YASG_PATH/static" ]; then
+                echo "   📁 Found drf-yasg static files at: $DRF_YASG_PATH/static"
+                cp -r "$DRF_YASG_PATH/static/drf-yasg" staticfiles/ 2>/dev/null && echo "   ✅ Manual copy successful" || echo "   ❌ Manual copy failed"
+            else
+                echo "   ❌ No static directory in drf-yasg package"
+            fi
+        else
+            echo "   ❌ drf-yasg package not available"
+        fi
+    fi
+else
+    echo "   ❌ staticfiles directory not created"
+    echo "   🔍 Checking current directory:"
+    ls -la
+fi
 
 echo "🔍 Running Production Security Checks..."
 python manage.py check --deploy
