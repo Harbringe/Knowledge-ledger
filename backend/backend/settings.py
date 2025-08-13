@@ -325,13 +325,41 @@ CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
     'https://api.razorpay.com'
 ])
 
-# Add FRONTEND_SITE_URL to both lists if it exists
-if env("FRONTEND_SITE_URL", default=None):
-    frontend_url = env("FRONTEND_SITE_URL")
+# Debug: Print environment variables for troubleshooting
+if DEBUG:
+    print(f"DEBUG: CSRF_TRUSTED_ORIGINS from env: {env.list('CSRF_TRUSTED_ORIGINS', default=[])}")
+    print(f"DEBUG: CORS_ALLOWED_ORIGINS from env: {env.list('CORS_ALLOWED_ORIGINS', default=[])}")
+    print(f"DEBUG: FRONTEND_SITE_URL from env: {env('FRONTEND_SITE_URL', default=None)}")
+
+# Filter out empty values and ensure proper schemes
+CSRF_TRUSTED_ORIGINS = [origin for origin in CSRF_TRUSTED_ORIGINS if origin and origin.strip()]
+CORS_ALLOWED_ORIGINS = [origin for origin in CORS_ALLOWED_ORIGINS if origin and origin.strip()]
+
+# Validate that all origins have proper schemes
+def validate_origin(origin):
+    """Validate that origin has proper scheme and is not empty"""
+    if not origin or not origin.strip():
+        return False
+    # Check if origin starts with http:// or https://
+    return origin.startswith(('http://', 'https://'))
+
+# Filter origins to only include valid ones
+CSRF_TRUSTED_ORIGINS = [origin for origin in CSRF_TRUSTED_ORIGINS if validate_origin(origin)]
+CORS_ALLOWED_ORIGINS = [origin for origin in CORS_ALLOWED_ORIGINS if validate_origin(origin)]
+
+# Add FRONTEND_SITE_URL to both lists if it exists and is valid
+frontend_url = env("FRONTEND_SITE_URL", default=None)
+if frontend_url and validate_origin(frontend_url):
     if frontend_url not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(frontend_url)
     if frontend_url not in CORS_ALLOWED_ORIGINS:
         CORS_ALLOWED_ORIGINS.append(frontend_url)
+
+# Final validation - ensure we have at least some valid origins
+if not CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000']
+if not CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000']
 
 CORS_ALLOW_CREDENTIALS = True
 
