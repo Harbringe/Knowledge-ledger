@@ -77,6 +77,33 @@ class Profile(models.Model):
             # Fallback for local storage
             return f'/media/{self.image}'
         return None
+    
+    def get_image_url_safe(self):
+        """
+        Safe method to get image URL that handles both old and new paths
+        """
+        if not self.image:
+            return None
+            
+        try:
+            # Try to get the URL normally first
+            if hasattr(self.image, 'url'):
+                return self.image.url
+        except Exception:
+            pass
+        
+        # Fallback: construct URL manually
+        image_path = str(self.image)
+        
+        # Handle Cloudinary URLs
+        if 'cloudinary.com' in image_path:
+            return image_path
+        
+        # Handle local storage URLs
+        if image_path.startswith('/'):
+            return image_path
+        else:
+            return f'/media/{image_path}'
 
 
 def create_user_profile(sender, instance, created, **kwargs):

@@ -106,6 +106,33 @@ class Teacher(models.Model):
             return f'/media/{self.image}'
         return None
     
+    def get_image_url_safe(self):
+        """
+        Safe method to get image URL that handles both old and new paths
+        """
+        if not self.image:
+            return None
+            
+        try:
+            # Try to get the URL normally first
+            if hasattr(self.image, 'url'):
+                return self.image.url
+        except Exception:
+            pass
+        
+        # Fallback: construct URL manually
+        image_path = str(self.image)
+        
+        # Handle Cloudinary URLs
+        if 'cloudinary.com' in image_path:
+            return image_path
+        
+        # Handle local storage URLs
+        if image_path.startswith('/'):
+            return image_path
+        else:
+            return f'/media/{image_path}'
+    
     # def save(self, *args, **kwargs):
     #     if not self.wallet_address:
     #         self.wallet_address = self.user.wallet_address
@@ -142,6 +169,33 @@ class Category(models.Model):
             # Fallback for local storage
             return f'/media/{self.image}'
         return None
+    
+    def get_image_url_safe(self):
+        """
+        Safe method to get image URL that handles both old and new paths
+        """
+        if not self.image:
+            return None
+            
+        try:
+            # Try to get the URL normally first
+            if hasattr(self.image, 'url'):
+                return self.image.url
+        except Exception:
+            pass
+        
+        # Fallback: construct URL manually
+        image_path = str(self.image)
+        
+        # Handle Cloudinary URLs
+        if 'cloudinary.com' in image_path:
+            return image_path
+        
+        # Handle local storage URLs
+        if image_path.startswith('/'):
+            return image_path
+        else:
+            return f'/media/{image_path}'
             
 
 class Course(models.Model):
@@ -233,6 +287,60 @@ class Course(models.Model):
             # Fallback for local storage
             return f'/media/{self.file}'
         return None
+    
+    def get_image_url_safe(self):
+        """
+        Safe method to get image URL that handles both old and new paths
+        """
+        if not self.image:
+            return None
+            
+        try:
+            # Try to get the URL normally first
+            if hasattr(self.image, 'url'):
+                return self.image.url
+        except Exception:
+            pass
+        
+        # Fallback: construct URL manually
+        image_path = str(self.image)
+        
+        # Handle Cloudinary URLs
+        if 'cloudinary.com' in image_path:
+            return image_path
+        
+        # Handle local storage URLs
+        if image_path.startswith('/'):
+            return image_path
+        else:
+            return f'/media/{image_path}'
+    
+    def get_file_url_safe(self):
+        """
+        Safe method to get file URL that handles both old and new paths
+        """
+        if not self.file:
+            return None
+            
+        try:
+            # Try to get the URL normally first
+            if hasattr(self.file, 'url'):
+                return self.file.url
+        except Exception:
+            pass
+        
+        # Fallback: construct URL manually
+        file_path = str(self.file)
+        
+        # Handle Cloudinary URLs
+        if 'cloudinary.com' in file_path:
+            return file_path
+        
+        # Handle local storage URLs
+        if file_path.startswith('/'):
+            return file_path
+        else:
+            return f'/media/{file_path}'
 
 
 class Certificate(models.Model):
@@ -269,6 +377,33 @@ class Certificate(models.Model):
             # Fallback for local storage
             return f'/media/{self.pdf_file}'
         return None
+    
+    def get_pdf_url_safe(self):
+        """
+        Safe method to get PDF URL that handles both old and new paths
+        """
+        if not self.pdf_file:
+            return None
+            
+        try:
+            # Try to get the URL normally first
+            if hasattr(self.pdf_file, 'url'):
+                return self.pdf_file.url
+        except Exception:
+            pass
+        
+        # Fallback: construct URL manually
+        file_path = str(self.pdf_file)
+        
+        # Handle Cloudinary URLs
+        if 'cloudinary.com' in file_path:
+            return file_path
+        
+        # Handle local storage URLs
+        if file_path.startswith('/'):
+            return file_path
+        else:
+            return f'/media/{file_path}'
     
     def save(self, *args, **kwargs):
         if not self.student_name and self.user:
@@ -342,6 +477,33 @@ class VariantItem(models.Model):
             # Fallback for local storage
             return f'/media/{self.file}'
         return None
+    
+    def get_file_url_safe(self):
+        """
+        Safe method to get file URL that handles both old and new paths
+        """
+        if not self.file:
+            return None
+            
+        try:
+            # Try to get the URL normally first
+            if hasattr(self.file, 'url'):
+                return self.file.url
+        except Exception:
+            pass
+        
+        # Fallback: construct URL manually
+        file_path = str(self.file)
+        
+        # Handle Cloudinary URLs
+        if 'cloudinary.com' in file_path:
+            return file_path
+        
+        # Handle local storage URLs
+        if file_path.startswith('/'):
+            return file_path
+        else:
+            return f'/media/{file_path}'
     
     # def save(self, *args, **kwargs):
     #     super().save(*args, **kwargs)
