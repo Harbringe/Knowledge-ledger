@@ -1928,6 +1928,8 @@ class QuizBestAttemptAPIView(generics.RetrieveAPIView):
 
 class QuizAnalyticsAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = api_serializer.QuizAttemptSerializer  # Add this line
+    
     def get(self, request, quiz_id):
         quiz = api_models.Quiz.objects.get(quiz_id=quiz_id)
         attempts = api_models.QuizAttempt.objects.filter(quiz=quiz)
@@ -2037,6 +2039,7 @@ class QuizAttemptResultAPIView(generics.RetrieveAPIView):
 
 class QuizStudentStatusAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = api_serializer.QuizAttemptSerializer  # Add this line
     
     def get(self, request, quiz_id):
         try:
