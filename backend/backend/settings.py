@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'anymail',
+    'cloudinary_storage',
         
     'drf_yasg'
 ]
@@ -187,8 +188,23 @@ WHITENOISE_MIMETYPES = {
     '.eot': 'application/vnd.ms-fontobject',
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Cloudinary Configuration for Media Storage
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default='your_cloud_name'),
+    'API_KEY': env('CLOUDINARY_API_KEY', default='your_api_key'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET', default='your_api_secret'),
+}
+
+# Use Cloudinary for media files
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Fallback to local storage if Cloudinary is not configured
+if not env('CLOUDINARY_CLOUD_NAME', default=None):
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+else:
+    MEDIA_URL = f"https://res.cloudinary.com/{env('CLOUDINARY_CLOUD_NAME')}/image/upload/"
 
 # Default static files configuration
 DEFAULT_AVATAR = '/static/images/defaults/avatars/default-avatar.jpg'

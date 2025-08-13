@@ -99,7 +99,6 @@ echo "   ✅ Cache cleared"
 echo "🎉 Render Build Complete!"
 echo "🚀 Your Django app is ready for Render deployment!"
 
-# Optional: Create superuser if environment variable is set
 if [[ $CREATE_SUPERUSER == "True" ]]; then
     echo "👤 Creating superuser..."
     python manage.py createsuperuser --no-input

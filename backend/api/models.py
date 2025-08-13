@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 
 from userauths.models import User, Profile
 from shortuuid.django_fields import ShortUUIDField
+from .utils import course_image_upload_path, course_video_upload_path, course_file_upload_path
 # from moviepy.editor import VideoFileClip
 import math
 
@@ -72,7 +73,7 @@ default_category_image = settings.DEFAULT_CATEGORY_IMAGE
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.FileField(upload_to="course-file", blank=True, null=True, default=default_avatar)
+    image = models.FileField(upload_to=course_file_upload_path, blank=True, null=True, default=default_avatar)
     full_name = models.CharField(max_length=100)
     bio = models.CharField(max_length=100, null=True, blank=True)
     facebook = models.URLField(null=True, blank=True)
@@ -101,7 +102,7 @@ class Teacher(models.Model):
     
 class Category(models.Model):
     title = models.CharField(max_length=100)
-    image = models.FileField(upload_to="course-file", default=default_category_image, null=True, blank=True)
+    image = models.FileField(upload_to=course_file_upload_path, default=default_category_image, null=True, blank=True)
     active = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
@@ -124,8 +125,8 @@ class Category(models.Model):
 class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True)
-    file = models.FileField(upload_to="course-file", blank=True, null=True, default=default_course_image)
-    image = models.FileField(upload_to="course-file", blank=True, null=True, default=default_course_image)
+    file = models.FileField(upload_to=course_video_upload_path, blank=True, null=True, default=default_course_image)
+    image = models.FileField(upload_to=course_image_upload_path, blank=True, null=True, default=default_course_image)
     title = models.CharField(max_length=200, null=True)
     description = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, blank=True, null=True)
@@ -208,7 +209,7 @@ class Certificate(models.Model):
         default='active',
         max_length=20
     )
-    pdf_file = models.FileField(upload_to='certificates/', null=True, blank=True)
+    pdf_file = models.FileField(upload_to=course_file_upload_path, null=True, blank=True)
     metadata = models.JSONField(default=dict, blank=True)  # For storing additional certificate data
 
     def __str__(self):
@@ -266,7 +267,7 @@ class VariantItem(models.Model):
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE, related_name="variant_items")
     title = models.CharField(max_length=1000)
     description = models.TextField(null=True, blank=True)
-    file = models.FileField(upload_to="course-file", blank=True, null=True, default="")
+    file = models.FileField(upload_to=course_video_upload_path, blank=True, null=True, default="")
     duration = models.DurationField(null=True, blank=True)
     content_duration = models.CharField(max_length=1000, null=True, blank=True)
     preview = models.BooleanField(default=False)
