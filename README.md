@@ -367,7 +367,7 @@ This project is licensed under the GPL License
 
 ### Backend Maintainer
 > **Aaditya Mehetre** (He/Him)  
-> Blockchain and Full Stack Developer   
+> Blockchain and Full Stack Developer @ [KONMA.ORG](https://www.konma.io/)  
 > Passionate about AI, ML, and Python Development  
 > Building decentralized apps powered by Cardano  
 > Computer Engineering Graduate  
@@ -376,7 +376,7 @@ This project is licensed under the GPL License
 
 ### Frontend Maintainer
 > **Vinit Inamke** (He/Him)  
-> Lead WEB3 Architect   
+> Lead WEB3 Architect @ [KONMA.ORG](https://www.konma.io/)  
 > Exploring Socio-Technical Innovation in Decentralized Systems  
 > Cardano Developer (Haskell, Plutus, Marlowe)  
 > Functional Programming Practitioner  
